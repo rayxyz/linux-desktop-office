@@ -1,0 +1,17 @@
+
+
+ssh shendu@192.168.1.252 
+Sd_admin_252
+
+ssh shendu@192.168.1.240
+123456
+
+cd /shendu/bin
+cd /etc/supervisor/conf.d/
+cd /etc/nginx/conf.d/8086.conf
+
+
+sudo supervisorctl reload
+
+sudo supervisorctl restart sd_usercenter_server 
+
