@@ -1,8 +1,36 @@
 
-#### Testing
+#### concurrency
 
 ## siege
 siege
 
 ## locustio
 pip install locustio
+
+## go-wrk
+https://github.com/adjust/go-wrk
+
+#### Go tool pprof
+## useful docs
+http://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/
+
+# go tool pprof -seconds 20 http://localhost:8081/debug/pprof/profile
+## list cpu time consuming functions.
+# (pprof) list
+## find findMaxSubArray section in list.
+# (pprof) list main.findMaxSubArray
+## to open svg on browser.
+# (pprof) web
+## the two commands below will generate pdf and svg in current dir.
+# (pprof) pdf
+# (pprof) svg
+## show assembly code.
+# (pprof) disasm list findMaxSubArray
+
+## go-torch
+https://github.com/uber/go-torch
+# go-torch -seconds 30 http://localhost:8081/debug/pprof/profile
+
+## go benchmarking
+https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go
+
