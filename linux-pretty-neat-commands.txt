@@ -1,12 +1,25 @@
-
-// Delete pattern matched files.
+#### Delete pattern matched files.
 
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -exec rm {} +
 ray@ray-pc:~/go_workspace/src/wholepro$ find ./ -type f -name 'README_*_*.md' -exec rm {} +
 
 
-// Mout remote server directory by using sshfs
+#### Mout remote server directory by using sshfs
 
 sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
+
+#### View max socket connections
+
+ray@ray-pc:~$ ulimit -n
+
+#### Restart a service
+
+sudo systemctl restart apache2
+
+#### show line number in vim
+
+:set number or :set nu
+
+:set nonumber or :set nonu
 
