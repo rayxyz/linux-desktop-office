@@ -1,12 +1,36 @@
 
-// Delete pattern matched files.
-
+#### Delete pattern matched files.
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -exec rm {} +
 ray@ray-pc:~/go_workspace/src/wholepro$ find ./ -type f -name 'README_*_*.md' -exec rm {} +
 
 
-// Mout remote server directory by using sshfs
-
+#### Mout remote server directory by using sshfs
 sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
+
+#### Copy ssh public key to remote server.
+ray@ray:~$ cat ~/.ssh/id_rsa.pub | ssh root@138.197.209.57 'cat >> .ssh/authorized_keys'
+
+#### Disable ssh public key access and enable password authentication.
+$> sudo vim /etc/ssh/sshd_conf
+##change PubkeyAuthentication yes to PubkeyAuthentication no
+##change PasswordAuthentication no to PasswordAuthentication yes
+##restart sshd service
+$> sudo systemctl restart sshd
+
+#### Run below commands after kubeadm init to start using your cluster, you need to run (as a regular user):
+sudo cp /etc/kubernetes/admin.conf $HOME/
+sudo chown $(id -u):$(id -g) $HOME/admin.conf
+export KUBECONFIG=$HOME/admin.conf
+
+#### Restart kubelet
+root@ray-work-srv:~# systemctl restart kubelet.service
+
+#### Join to the master
+Master: master
+kubeadm join --token 752fa0.ffcfc9206554d480 165.227.7.64:6443
+
+Master: node1
+kubeadm join --token db2706.8e70a575e1474b6a 165.227.3.151:6443
+
 
