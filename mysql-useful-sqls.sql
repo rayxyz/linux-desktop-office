@@ -2,6 +2,8 @@
 #### Show currently in use database.
 select database();
 
+#### Change root password
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('pass')
 
 #### Check if a database exists.
 SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'sdp_db';

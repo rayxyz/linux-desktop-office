@@ -33,4 +33,6 @@ https://github.com/uber/go-torch
 
 ## go benchmarking
 https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go
+#
+go test -bench=. -count 5 -benchmem -cpuprofile cpu.out -memprofile mem.out -blockprofile block.out -coverprofile cover.out -mutexprofile mutex.out -trace trace.out -outputdir ~/file/pprof
 
