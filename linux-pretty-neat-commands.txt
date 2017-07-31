@@ -15,6 +15,7 @@ sudo systemctl restart apache2
 
 #### Mout remote server directory by using sshfs
 sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
+sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
 
 #### Copy ssh public key to remote server.
 ray@ray:~$ cat ~/.ssh/id_rsa.pub | ssh root@138.197.209.57 'cat >> .ssh/authorized_keys'
@@ -41,9 +42,25 @@ kubeadm join --token 752fa0.ffcfc9206554d480 165.227.7.64:6443
 Master: node1
 kubeadm join --token db2706.8e70a575e1474b6a 165.227.3.151:6443
 
-sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
-
 ####
 kubectl --kubeconfig ./admin.conf get pods --all-namespaces -o wide
+
+#### Remove last kubernetes config
+rm ~/.kube/config
+
+#### Change device name
+sudo hostname dock-regis-svr
+sudo vim /etc/hostname
+
+#### Run docker registry with external accessible ability
+root@ray-xyz:~# docker run -d --restart=always --name registry -v `pwd`/certs:/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:9090 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/privkey.pem -p 9090:9090 registry:2
+## Solve the `registry: x509: certificate signed by unknown authority` problem
+root@ray-xyz:/usr/local/share/ca-certificates# cp ~/certs/ray-xyz-cert.pem .
+root@ray-xyz:/usr/local/share/ca-certificates# cp ~/certs/ray-xyz-privkey.pem .
+root@ray-xyz:~# sudo update-ca-certificates
+root@ray-xyz:~# sudo service docker restart
+
+
+
 
 
