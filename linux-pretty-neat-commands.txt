@@ -1,3 +1,4 @@
+##################################### General #######################################
 #### Delete pattern matched files.
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -exec rm {} +
@@ -27,20 +28,37 @@ $> sudo vim /etc/ssh/sshd_conf
 ##restart sshd service
 $> sudo systemctl restart sshd
 
+#### Change device name
+sudo hostname dock-regis-svr
+sudo vim /etc/hostname
+
+
+####################### Kubernetes related ########################
+#### Reference
+https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+https://kubernetes.io/docs/setup/independent/install-kubeadm/
+https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+#### Do not forge the following commands show in the `kubeadm init` command result.
 #### Run below commands after kubeadm init to start using your cluster, you need to run (as a regular user):
-sudo cp /etc/kubernetes/admin.conf $HOME/
-sudo chown $(id -u):$(id -g) $HOME/admin.conf
-export KUBECONFIG=$HOME/admin.conf
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#### Restart kubelet
-root@ray-work-srv:~# systemctl restart kubelet.service
+#### You can view pods healthy status by using comman `kubectl get pods --all-namespaces`, and it can show whether kube-dns and kube-flannel were installed correctly.
+kubectl get pods --all-namespaces
 
-#### Join to the master
-Master: master
-kubeadm join --token 752fa0.ffcfc9206554d480 165.227.7.64:6443
+#### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
+#### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
+kubeadm join --token f38454.308b9c14a7b06443 165.227.6.241:6443
+## Start docker.service and restart kubelet.service
+systemctl start docker.service
+systemctl restart kubelet.service
 
-Master: node1
-kubeadm join --token db2706.8e70a575e1474b6a 165.227.3.151:6443
+#### Sove the nodes notready issue(The issue is produced by pod network in my situation.)
+## Don't use weave-net as the network, just pick up the flannel(I tried, it works.)
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
 ####
 kubectl --kubeconfig ./admin.conf get pods --all-namespaces -o wide
@@ -48,17 +66,39 @@ kubectl --kubeconfig ./admin.conf get pods --all-namespaces -o wide
 #### Remove last kubernetes config
 rm ~/.kube/config
 
-#### Change device name
-sudo hostname dock-regis-svr
-sudo vim /etc/hostname
+#### Tear down (Drain, delete, reset).
+## Drain a node
+kubectl drain kube-node-01 --delete-local-data --force --ignore-daemonsets
+kubectl delete node kube-node-02
+kubeadm reset
+
+
+######################### Docker related ###########################
+#### Reference
+https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+https://docs.docker.com/registry/deploying/
 
 #### Run docker registry with external accessible ability
-root@ray-xyz:~# docker run -d --restart=always --name registry -v `pwd`/certs:/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:9090 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/privkey.pem -p 9090:9090 registry:2
-## Solve the `registry: x509: certificate signed by unknown authority` problem
-root@ray-xyz:/usr/local/share/ca-certificates# cp ~/certs/ray-xyz-cert.pem .
-root@ray-xyz:/usr/local/share/ca-certificates# cp ~/certs/ray-xyz-privkey.pem .
-root@ray-xyz:~# sudo update-ca-certificates
-root@ray-xyz:~# sudo service docker restart
+## Reference => https://gist.github.com/PieterScheffers/63e4c2fd5553af8a35101b5e868a811e
+## letsencrypt installing => https://certbot.eff.org/#ubuntuxenial-other
+## letsencrypt path => /etc/letsencrypt
+## Docker registry doc => https://docs.docker.com/registry/deploying/
+# Run registry container
+docker run -d --restart=always --name registry -v ~/certs/ray-xyz.com:/certs -v /opt/docker-registry:/var/lib/registry  -e REGISTRY_HTTP_ADDR=0.0.0.0:9090 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key -p 9090:9090 registry:2
+# Push images to ray-xyz.com:9090
+docker push ray-xyz.com:9090/ubuntu1604
+# View repositories on registry server
+https://www.ray-xyz.com:9090/v2/_catalog
+# Pull a image
+docker pull ray-xyz.com:9090/ubuntu1604
+
+#### Stop and remove all containers
+sudo docker stop $(sudo docker ps -a -q)
+sudo docker rm $(sudo docker ps -a -q)
+
+
+
+
 
 
 
