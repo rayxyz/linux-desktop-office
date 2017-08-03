@@ -32,6 +32,11 @@ $> sudo systemctl restart sshd
 sudo hostname dock-regis-svr
 sudo vim /etc/hostname
 
+#### Count rows of results
+sudo docker images | tee >(wc -l)
+## Or
+sudo docker images | awk '{print} END {print NR}'
+
 
 ####################### Kubernetes related ########################
 #### Reference
@@ -45,12 +50,18 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+####
+mkdir /etc/cni/net.d
+
+####
+systemctl start kubelet.service
+
 #### You can view pods healthy status by using comman `kubectl get pods --all-namespaces`, and it can show whether kube-dns and kube-flannel were installed correctly.
 kubectl get pods --all-namespaces
 
 #### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
 #### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
-kubeadm join --token f38454.308b9c14a7b06443 165.227.6.241:6443
+kubeadm join --token 8e8c40.6471b63ae7c2b89a 165.227.20.255:6443
 ## Start docker.service and restart kubelet.service
 systemctl start docker.service
 systemctl restart kubelet.service
@@ -71,6 +82,9 @@ rm ~/.kube/config
 kubectl drain kube-node-01 --delete-local-data --force --ignore-daemonsets
 kubectl delete node kube-node-02
 kubeadm reset
+
+#### View kubelet logs
+journalctl -u kubelet
 
 
 ######################### Docker related ###########################
