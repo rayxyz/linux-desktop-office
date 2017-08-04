@@ -1,4 +1,11 @@
 ##################################### General #######################################
+#### View macheine kernel
+uname -a
+
+#### Change to root
+sudo -i
+sudo su -
+
 #### Delete pattern matched files.
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -exec rm {} +
@@ -56,20 +63,36 @@ mkdir /etc/cni/net.d
 ####
 systemctl start kubelet.service
 
+#### Expose a service
+kubectl expose deployment hello-cors-app --type=LoadBalancer --name=hello-cors-app-loadbalancer --external-ip=165.227.17.223 --port=8090
+
 #### You can view pods healthy status by using comman `kubectl get pods --all-namespaces`, and it can show whether kube-dns and kube-flannel were installed correctly.
 kubectl get pods --all-namespaces
 
 #### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
 #### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
-kubeadm join --token 8e8c40.6471b63ae7c2b89a 165.227.20.255:6443
+kubeadm join --token f3c81a.674387c21f72cd8f 165.227.17.223:6443
+
 ## Start docker.service and restart kubelet.service
 systemctl start docker.service
 systemctl restart kubelet.service
 
-#### Sove the nodes notready issue(The issue is produced by pod network in my situation.)
+#### Solve the nodes notready issue(The issue is produced by pod network in my situation.)
 ## Don't use weave-net as the network, just pick up the flannel(I tried, it works.)
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+
+#### Solve the creation of pod in pending status issue.
+###
+$kubectl create -f hello-cors-app-deploy.yaml
+
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason			Message
+  ---------	--------	-----	----			-------------	--------	------			-------
+  38s		7s		7	default-scheduler			Warning		FailedScheduling	No nodes are available that match all of the following predicates:: PodToleratesNodeTaints (1).
+###
+## Execute the below command and recreate resources to solve the problem.
+kubectl taint nodes kube-master node-role.kubernetes.io/master:NoSchedule-
 
 ####
 kubectl --kubeconfig ./admin.conf get pods --all-namespaces -o wide
@@ -85,6 +108,9 @@ kubeadm reset
 
 #### View kubelet logs
 journalctl -u kubelet
+
+#### View deployment detail information in namespace `default`
+kubectl get deploy hello-cors-app -n default -oyaml
 
 
 ######################### Docker related ###########################
