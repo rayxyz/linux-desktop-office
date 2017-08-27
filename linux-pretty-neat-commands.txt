@@ -29,7 +29,7 @@ sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
 ray@ray:~$ cat ~/.ssh/id_rsa.pub | ssh root@138.197.209.57 'cat >> .ssh/authorized_keys'
 
 #### Disable ssh public key access and enable password authentication.
-$> sudo vim /etc/ssh/sshd_conf
+$> sudo vim /etc/ssh/sshd_config
 ##change PubkeyAuthentication yes to PubkeyAuthentication no
 ##change PasswordAuthentication no to PasswordAuthentication yes
 ##restart sshd service
@@ -43,6 +43,9 @@ sudo vim /etc/hostname
 sudo docker images | tee >(wc -l)
 ## Or
 sudo docker images | awk '{print} END {print NR}'
+
+#### View folder structrue without extracting content.
+tar -tf go1.9.linux-amd64.tar.gz
 
 
 ####################### Kubernetes related ########################
