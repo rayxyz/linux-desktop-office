@@ -1,0 +1,18 @@
+
+#### References
+https://help.ubuntu.com/community/SoundTroubleshooting
+
+https://askubuntu.com/questions/632458/audio-card-cant-be-found
+
+https://bbs.archlinux.org/viewtopic.php?id=177547
+
+### Some commands
+alsamixer
+amixer
+sudo alsa force-reload
+
+#### Install hda-jack-retask
+sudo add-apt-repository ppa:diwic/hda
+sudo apt-get install alsa-tools-gui
+# run the hdajackretask
+hdajackretask
