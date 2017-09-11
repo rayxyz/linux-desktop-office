@@ -44,6 +44,24 @@ sudo docker images | tee >(wc -l)
 ## Or
 sudo docker images | awk '{print} END {print NR}'
 
+#### Run process in the background by using nohup
+nohup ./hello &
+
+#### View directory in tree structure
+tree dir
+
+#### View tar.gz file structure
+tar -tf nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz
+
+#### Aliases
+INFANTGRPC=$GOPATH/src/infant/vendor/github.com/golang/protobuf/protoc-gen-go
+#SDGRPC=$GOPATH/src/shendu.com/vendor/github.com/golang/protobuf/protoc-gen-go
+SDGRPC=$GOPATH/bin
+MICROGRPC=$GOPATH/src/wholepro/vendor/protoc-gen-go
+alias iprotoc='PATH=$PATH:$INFANTGRPC /usr/local/bin/protoc -I . --go_out=plugins=grpc:.'
+alias sdprotoc='/usr/local/bin/protoc --plugin=$SDGRPC/protoc-gen-go -I . --go_out=plugins=grpc:.'
+alias mprotoc='$GOPATH/src/wholepro/vendor/protoc/protoc --plugin=$MICROGRPC/protoc-gen-go -I . --go_out=plugins=micro:.'
+
 
 ####################### Kubernetes related ########################
 #### Reference
@@ -71,7 +89,7 @@ kubectl get pods --all-namespaces
 
 #### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
 #### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
-kubeadm join --token f3c81a.674387c21f72cd8f 165.227.17.223:6443
+kubeadm join --token a9ff01.82d70b9c3fcadbe0 104.236.224.28:6443
 
 ## Start docker.service and restart kubelet.service
 systemctl start docker.service
@@ -135,6 +153,31 @@ docker pull ray-xyz.com:9090/ubuntu1604
 #### Stop and remove all containers
 sudo docker stop $(sudo docker ps -a -q)
 sudo docker rm $(sudo docker ps -a -q)
+
+
+
+######################################### Git ###########################
+#### List configs
+git config -l
+
+#### Create a branch and check it out.
+git checkout -b ray
+
+#### Ignore some file modified and added it to the .gitignore but still showing under the command `git status`
+git rm -r --cached github.com/golang/protobuf/protoc-gen-go/protoc-gen-go
+
+#### Reset add
+git reset HEAD github.com/golang/protobuf/protoc-gen-go/protoc-gen-go
+
+#### Reset commit
+git reset --soft HEAD^
+
+#### Credential caching
+git config credential.helper store
+## With specific time to expire (eg.: 2hrs)
+git config --global credential.helper 'cache --timeout 7200'
+
+
 
 
 

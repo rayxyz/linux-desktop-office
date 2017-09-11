@@ -15,3 +15,5 @@ sudo supervisorctl reload
 
 sudo supervisorctl restart sd_usercenter_server 
 
+http://api.shendupeiban.com/palm/v2/adjustSeating
+
