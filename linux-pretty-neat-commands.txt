@@ -29,7 +29,7 @@ sshfs shendu@192.168.1.240:/shendu/bin ~/workspace/trans
 ray@ray:~$ cat ~/.ssh/id_rsa.pub | ssh root@138.197.209.57 'cat >> .ssh/authorized_keys'
 
 #### Disable ssh public key access and enable password authentication.
-$> sudo vim /etc/ssh/sshd_conf
+$> sudo vim /etc/ssh/sshd_config
 ##change PubkeyAuthentication yes to PubkeyAuthentication no
 ##change PasswordAuthentication no to PasswordAuthentication yes
 ##restart sshd service
