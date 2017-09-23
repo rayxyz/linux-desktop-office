@@ -6,6 +6,9 @@ uname -a
 sudo -i
 sudo su -
 
+#### Processes related
+ps -ax | grep nginx
+
 #### Delete pattern matched files.
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -exec rm {} +
@@ -62,12 +65,30 @@ alias iprotoc='PATH=$PATH:$INFANTGRPC /usr/local/bin/protoc -I . --go_out=plugin
 alias sdprotoc='/usr/local/bin/protoc --plugin=$SDGRPC/protoc-gen-go -I . --go_out=plugins=grpc:.'
 alias mprotoc='$GOPATH/src/wholepro/vendor/protoc/protoc --plugin=$MICROGRPC/protoc-gen-go -I . --go_out=plugins=micro:.'
 
+#### supervisor
+sudo apt-get install supervisor
+## create supervisord.conf under dir /etc/supervisor
+cd /etc/sueprvisor
+cp echo_suerpvisord_conf > supervisord.conf
+## Start supervisor service
+sudo supervisord
+
+#### ip
+## View ip addresses
+ip address
 
 ####################### Kubernetes related ########################
 #### Reference
 https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 https://kubernetes.io/docs/setup/independent/install-kubeadm/
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+#### View cluster config
+kubectl config view
+
+#### ssh into minikube node
+You can ssh into the VM by finding the IP (from kubectl config view) and using username "docker" password "tcuser":
+ssh docker@192.168.XX.XX
 
 #### Do not forge the following commands show in the `kubeadm init` command result.
 #### Run below commands after kubeadm init to start using your cluster, you need to run (as a regular user):
@@ -130,8 +151,29 @@ journalctl -u kubelet
 #### View deployment detail information in namespace `default`
 kubectl get deploy hello-cors-app -n default -oyaml
 
+#### Run from images
+kubectl run hiapi --image=ray-xyz.com:9090/hiapi --port=6767
+
+### Expose deployment to service
+kubectl expose deployment hiapi --type=NodePort
+
+#### Access kubernetes pods from the outside of a cluster
+## Reference: 
+#https://docs.giantswarm.io/guides/accessing-services-from-the-outside/
+kubectl port-forward -n default hiapi-1365250305-x8lb2 6767:6767
+
+#### ssh into a kubenetes docker machine
+eval $(minikube docker-env)
+eval $(minikube docker-env -u)
+docker attach 970939b30548
+
 
 ######################### Docker related ###########################
+#### Everyday repos
+## MySQL Server CE
+sudo docker pull mysql/mysql-server:5.7
+sudo docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-server:5.7
+
 #### Reference
 https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
 https://docs.docker.com/registry/deploying/
@@ -143,6 +185,22 @@ https://docs.docker.com/registry/deploying/
 ## Docker registry doc => https://docs.docker.com/registry/deploying/
 # Run registry container
 docker run -d --restart=always --name registry -v ~/certs/ray-xyz.com:/certs -v /opt/docker-registry:/var/lib/registry  -e REGISTRY_HTTP_ADDR=0.0.0.0:9090 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key -p 9090:9090 registry:2
+## Login to registry server
+docker login ray-xyz.com:9090
+
+#### Working with images
+# Pull a base image
+sudo docker pull ubuntu:16.04
+# Build an image by using Dockerfile
+###
+#FROM ray-xyz.com:9090/ubuntu1604
+#MAINTAINER Raywang
+#ADD bin/consul /usr/local/bin
+#ENTRYPOINT consul agent -dev
+###
+sudo docker build -t ray-xyz.com:9090/consul .
+# Tag an image
+docker tag image username/repository:tag => sudo docker tag ubuntu:16.04 ray-xyz.com/ubuntu1604
 # Push images to ray-xyz.com:9090
 docker push ray-xyz.com:9090/ubuntu1604
 # View repositories on registry server
@@ -153,7 +211,25 @@ docker pull ray-xyz.com:9090/ubuntu1604
 #### Stop and remove all containers
 sudo docker stop $(sudo docker ps -a -q)
 sudo docker rm $(sudo docker ps -a -q)
+## Delete all images
+sudo docker image rm $(sudo docker images)
 
+#### Communication between containers
+## View or set ip-forwarding of the host machine
+# View
+sysctl net.ipv4.conf.all.forwarding
+# Set => 1 to true, 0 for false
+sysctl net.ipv4.conf.all.forwarding=1
+## The ip_forward setting doesn't affect container when using the host net stack => --net=host
+## Using the network of the host.
+# sudo docker run --net=host ray-xyz.com:9090/hi
+
+#### View bridge info
+sudo docker network inspect bridge
+
+#### View container info
+sudo docker ps
+sudo docker inspect 6f3e8d085c66
 
 
 ######################################### Git ###########################
@@ -176,6 +252,27 @@ git reset --soft HEAD^
 git config credential.helper store
 ## With specific time to expire (eg.: 2hrs)
 git config --global credential.helper 'cache --timeout 7200'
+
+#### Merge
+Merge branches fixes and enhancements on top of the current branch, making an octopus merge:
+$ git merge fixes enhancements
+
+Merge branch obsolete into the current branch, using ours merge strategy:
+$ git merge -s ours obsolete
+
+Merge branch maint into the current branch, but do not make a new commit automatically:
+$ git merge --no-commit maint
+
+#### Force checkout branch
+git checkout -f another-branch
+
+
+##################################### consul ##################################
+#### Run on local
+consul agent -dev -enable-script-checks
+#### Run in Docker
+sudo docker run --net=host ray-xyz.com:9090/consul
+
 
 
 
