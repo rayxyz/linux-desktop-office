@@ -19,13 +19,12 @@ cd /etc/nginx/conf.d/8086.conf
 
 sudo supervisorctl reload
 
-sudo supervisorctl restart sd_usercenter_server 
-
-
+sudo supervisorctl restart sd_usercenter_server
 
 
 ----------------------------- temp ------------------------------------
 
 kubeadm join --token 5742bb.cd4d88bdc2e9ab39 165.227.9.89:6443
 
+http://api.shendupeiban.com/palm/v2/adjustSeating
 

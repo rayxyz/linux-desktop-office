@@ -31,4 +31,9 @@ FROM information_schema.tables
 WHERE table_schema='mydb' and table_name='mytable';
 
 
+#### DATE_ADD
+select now();
+select DATE_ADD(now(), interval 20 minute);
+
+
 
