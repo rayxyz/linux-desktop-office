@@ -90,7 +90,7 @@ kubectl config view
 You can ssh into the VM by finding the IP (from kubectl config view) and using username "docker" password "tcuser":
 ssh docker@192.168.XX.XX
 
-#### Do not forge the following commands show in the `kubeadm init` command result.
+#### Do not forget the following commands show in the `kubeadm init` command result.
 #### Run below commands after kubeadm init to start using your cluster, you need to run (as a regular user):
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -120,7 +120,8 @@ kubectl get pods --all-namespaces
 
 #### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
 #### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
-kubeadm join --token a9ff01.82d70b9c3fcadbe0 104.236.224.28:6443
+kubeadm join --token e3c452.777973cf2e7d36f4 165.227.9.89:6443
+
 
 ## Start docker.service and restart kubelet.service
 systemctl start docker.service
@@ -131,7 +132,7 @@ systemctl restart kubelet.service
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
-#### Solve the creation of pod in pending status issue.
+#### Solve the creation of pod in pending status issue When You Need to Deploy Apps on the Mater Node.
 ###
 $kubectl create -f hello-cors-app-deploy.yaml
 
@@ -167,7 +168,7 @@ kubectl run hiapi --image=ray-xyz.com:9090/hiapi --port=6767
 ### Expose deployment to service
 kubectl expose deployment hiapi --type=NodePort
 
-#### Access kubernetes pods from the outside of a cluster
+#### Access kubernetes pods from the outside of a cluster (Local test)
 ## Reference: 
 #https://docs.giantswarm.io/guides/accessing-services-from-the-outside/
 kubectl port-forward -n default hiapi-1365250305-x8lb2 6767:6767
@@ -176,6 +177,61 @@ kubectl port-forward -n default hiapi-1365250305-x8lb2 6767:6767
 eval $(minikube docker-env)
 eval $(minikube docker-env -u)
 docker attach 970939b30548
+
+#### View pods logs with level.
+kubectl logs -f nginx-ingress-controller-2156363272-f3qfm --v=10
+
+#### The simplist way to creat a kubernetes cluster.
+1. Create some VPS
+
+2. Install docker.
+sudo apt-get install docker.io
+
+3. Install kubectl.
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+
+4. Install kubeadm & kubelet.
+apt-get update && apt-get install -y apt-transport-https
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubelet kubeadm
+
+5. Init kubeadm on the master nodes.
+kubeadm init --pod-network-cidr=10.244.0.0/1
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+6. Add CNI(e.g. => flannel container network interface) on the master nodes.
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+7. Deploy apps
+kubectl run nginx --image=nginx
+kubectl run hiapi --image=ray-xyz.com:9090/hiapi
+
+8. Expose services
+kubectl expose deployment nginx --external-ip=165.227.9.89 --type=LoadBalancer --port=80
+kubectl expose deployment hiapi --type=LoadBalancer --external-ip=165.227.9.89 --port=6767
+
+9. Access services outside of cluster.
+curl http://165.227.9.89
+curl http://165.227.9.89:6767
+or
+curl http://api.ray-xyz.com/
+curl http://api.ray-xyz.com:6767/
+
+10. If you encounter problems which are unsolvable of setting up the cluster or you just want to clear everything you have setup(Tear down the cluster), just run the following commands.
+kubectl drain <node name> --delete-local-data --force --ignore-daemonsets
+kubectl delete node <node name>
+kubeadm reset
+
+11. View pods and know where are they deployed.
+root@kube-master:~# kubectl get pods -o wide
+NAME                     READY     STATUS    RESTARTS   AGE       IP           NODE
+hiapi-1313114994-x0q51   1/1       Running   0          5h        10.244.2.2   kube-slave-02
 
 
 ######################### Docker related ###########################
