@@ -102,8 +102,18 @@ mkdir /etc/cni/net.d
 ####
 systemctl start kubelet.service
 
+#### Run a pod
+## If you want to expose an external service as a LoadBalancer then you should expose a single container with --hostport arg.
+# Reference => http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/
+kubectl run hiapix --image=ray-xyz.com:9090/hiapi --hostport=6767 --port 6767
+root@kube-master:~# kubectl run nginx --image=nginx
+
 #### Expose a service
 kubectl expose deployment hello-cors-app --type=LoadBalancer --name=hello-cors-app-loadbalancer --external-ip=165.227.17.223 --port=8090
+## Once you have exposed a container with port set, then you can expose a service as a load balancer.
+kubectl expose deployment hiapix --type=LoadBalancer --external-ip=165.227.9.89 --port=6767
+root@kube-master:~# kubectl expose deployment nginx --type=LoadBalancer --external-ip=165.227.9.89 --port=80
+
 
 #### You can view pods healthy status by using comman `kubectl get pods --all-namespaces`, and it can show whether kube-dns and kube-flannel were installed correctly.
 kubectl get pods --all-namespaces
