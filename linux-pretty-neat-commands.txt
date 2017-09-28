@@ -102,25 +102,15 @@ mkdir /etc/cni/net.d
 ####
 systemctl start kubelet.service
 
-#### Run a pod
-## If you want to expose an external service as a LoadBalancer then you should expose a single container with --hostport arg.
-# Reference => http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/
-kubectl run hiapix --image=ray-xyz.com:9090/hiapi --hostport=6767 --port 6767
-root@kube-master:~# kubectl run nginx --image=nginx
-
 #### Expose a service
 kubectl expose deployment hello-cors-app --type=LoadBalancer --name=hello-cors-app-loadbalancer --external-ip=165.227.17.223 --port=8090
-## Once you have exposed a container with port set, then you can expose a service as a load balancer.
-kubectl expose deployment hiapix --type=LoadBalancer --external-ip=165.227.9.89 --port=6767
-root@kube-master:~# kubectl expose deployment nginx --type=LoadBalancer --external-ip=165.227.9.89 --port=80
-
 
 #### You can view pods healthy status by using comman `kubectl get pods --all-namespaces`, and it can show whether kube-dns and kube-flannel were installed correctly.
 kubectl get pods --all-namespaces
 
 #### Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, 
 #### or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
-kubeadm join --token e3c452.777973cf2e7d36f4 165.227.9.89:6443
+kubeadm join --token 0156cb.8d902d099f75f5ae 165.227.16.169:6443
 
 
 ## Start docker.service and restart kubelet.service
@@ -181,6 +171,9 @@ docker attach 970939b30548
 #### View pods logs with level.
 kubectl logs -f nginx-ingress-controller-2156363272-f3qfm --v=10
 
+#### Attach to container in a pod.
+kubectl exec -it  YOUR_CONTAINER/POD_NAME bash
+
 #### The simplist way to creat a kubernetes cluster.
 1. Create some VPS
 
@@ -215,6 +208,7 @@ kubectl run hiapi --image=ray-xyz.com:9090/hiapi
 8. Expose services
 kubectl expose deployment nginx --external-ip=165.227.9.89 --type=LoadBalancer --port=80
 kubectl expose deployment hiapi --type=LoadBalancer --external-ip=165.227.9.89 --port=6767
+kubectl expose deployment realmicrokube --type=LoadBalancer --external-ip=165.227.16.169 --port=80 --target-port=7878
 
 9. Access services outside of cluster.
 curl http://165.227.9.89
