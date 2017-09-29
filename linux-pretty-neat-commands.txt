@@ -154,9 +154,13 @@ kubectl get deploy hello-cors-app -n default -oyaml
 
 #### Run from images
 kubectl run hiapi --image=ray-xyz.com:9090/hiapi --port=6767
+kubectl run hiapix --image=ray-xyz.com:9090/hiapi --labels='app=hiapi'
 
-### Expose deployment to service
+#### Expose deployment to service
 kubectl expose deployment hiapi --type=NodePort
+
+#### Select service by labels
+kubectl get svc -l='app=hiapi'
 
 #### Access kubernetes pods from the outside of a cluster (Local test)
 ## Reference: 
@@ -168,7 +172,7 @@ eval $(minikube docker-env)
 eval $(minikube docker-env -u)
 docker attach 970939b30548
 
-#### View pods logs with level.
+#### View pods logs with level(and you can view program running logs. Yeah!!!).
 kubectl logs -f nginx-ingress-controller-2156363272-f3qfm --v=10
 
 #### Attach to container in a pod.
@@ -226,6 +230,30 @@ kubeadm reset
 root@kube-master:~# kubectl get pods -o wide
 NAME                     READY     STATUS    RESTARTS   AGE       IP           NODE
 hiapi-1313114994-x0q51   1/1       Running   0          5h        10.244.2.2   kube-slave-02
+
+#### RBAC Auth
+## If you cannot use kube client api, and the log shows like `2017/09/29 08:00:46 http: panic serving 10.244.0.0:53336: User "system:serviceaccount:default:default" cannot list pods in the namespace "default". (get pods)
+`, then you should grant auth to the current role.
+## Eg.
+##
+touch rbac-default.yaml
+sudo vim rbac-default.yaml
+#Content =>
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: rbac-default
+subjects:
+  - kind: ServiceAccount
+    # Reference to upper's `metadata.name`
+    name: default
+    # Reference to upper's `metadata.namespace`
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+##
 
 
 ######################### Docker related ###########################
