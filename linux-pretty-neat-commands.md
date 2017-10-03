@@ -226,6 +226,12 @@ kubectl run hiapi --image=ray-xyz.com:9090/hiapi --port=6767
 kubectl run hiapix --image=ray-xyz.com:9090/hiapi --labels='app=hiapi'
 ```
 
+## Scale deployments
+```
+root@kube-master:~# kubectl scale deployments/com-shendu-service-usercenter-user --replicas=3
+
+```
+
 ## Expose deployment to service
 ```
 kubectl expose deployment hiapi --type=NodePort
