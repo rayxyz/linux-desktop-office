@@ -161,7 +161,7 @@ kubectl get pods --all-namespaces
 
 ## Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
 ```
-kubeadm join --token 0156cb.8d902d099f75f5ae 165.227.16.169:6443
+  kubeadm join --token 471c3a.d533dd3fd032e3f3 165.227.21.174:6443 --discovery-token-ca-cert-hash sha256:deff963386e33df9d045519b95f574d6136fe7b0b338b863dc288c70350dacc5
 ```
 
 ## Start docker.service and restart kubelet.service
