@@ -161,7 +161,7 @@ kubectl get pods --all-namespaces
 
 ## Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
 ```
-kubeadm join --token 0156cb.8d902d099f75f5ae 165.227.16.169:6443
+kubeadm join --token e14620.4b5e037c9aec9c2b 138.68.243.199:6443 --discovery-token-ca-cert-hash sha256:4ebb9f07b9d86fc2e8d5dac00f3215f304b0087d10bca1521134af1fe7cd8690
 ```
 
 ## Start docker.service and restart kubelet.service
@@ -358,6 +358,10 @@ roleRef:
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 ##
+```
+Apply the rbac-default.yaml
+```
+kubectl apply -f rbac-default.yaml
 ```
 
 # Docker related
