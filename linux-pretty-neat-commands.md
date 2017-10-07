@@ -161,7 +161,11 @@ kubectl get pods --all-namespaces
 
 ## Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
 ```
+<<<<<<< HEAD
 kubeadm join --token e14620.4b5e037c9aec9c2b 138.68.243.199:6443 --discovery-token-ca-cert-hash sha256:4ebb9f07b9d86fc2e8d5dac00f3215f304b0087d10bca1521134af1fe7cd8690
+=======
+  kubeadm join --token 471c3a.d533dd3fd032e3f3 165.227.21.174:6443 --discovery-token-ca-cert-hash sha256:deff963386e33df9d045519b95f574d6136fe7b0b338b863dc288c70350dacc5
+>>>>>>> 1130bf4f747eb8ac48f3d4d93999f509c8e40e99
 ```
 
 ## Start docker.service and restart kubelet.service
@@ -224,6 +228,12 @@ kubectl get deploy hello-cors-app -n default -oyaml
 ```
 kubectl run hiapi --image=ray-xyz.com:9090/hiapi --port=6767
 kubectl run hiapix --image=ray-xyz.com:9090/hiapi --labels='app=hiapi'
+```
+
+## Scale deployments
+```
+root@kube-master:~# kubectl scale deployments/com-shendu-service-usercenter-user --replicas=3
+
 ```
 
 ## Expose deployment to service
