@@ -15,6 +15,9 @@ sudo su -
 ps -ax | grep nginx
 ```
 
+## Open nautilus with root
+gksudo nautilus
+
 ## Delete pattern matched files.
 ```
 find /path/to/directory -type f -name '*[0-9]x[0-9]*[0-9]x[0-9]*.jpg' -delete
@@ -161,11 +164,7 @@ kubectl get pods --all-namespaces
 
 ## Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
 ```
-<<<<<<< HEAD
-kubeadm join --token e14620.4b5e037c9aec9c2b 138.68.243.199:6443 --discovery-token-ca-cert-hash sha256:4ebb9f07b9d86fc2e8d5dac00f3215f304b0087d10bca1521134af1fe7cd8690
-=======
-  kubeadm join --token 471c3a.d533dd3fd032e3f3 165.227.21.174:6443 --discovery-token-ca-cert-hash sha256:deff963386e33df9d045519b95f574d6136fe7b0b338b863dc288c70350dacc5
->>>>>>> 1130bf4f747eb8ac48f3d4d93999f509c8e40e99
+kubeadm join --token 471c3a.d533dd3fd032e3f3 165.227.21.174:6443 --discovery-token-ca-cert-hash sha256:deff963386e33df9d045519b95f574d6136fe7b0b338b863dc288c70350dacc5
 ```
 
 ## Start docker.service and restart kubelet.service
@@ -374,6 +373,23 @@ Apply the rbac-default.yaml
 kubectl apply -f rbac-default.yaml
 ```
 
+## Upgrade the Minikube
+```
+minikube delete
+sudo rm -rf ~/.minikube
+```
+re-install minikube and it should work
+
+## Access kubernetes service in Minikube cluster
+```
+minikube service sdmicro
+```
+
+## Image pull policy
+```
+kubectl run sdmicro --image=ray-xyz.com:9090/sdmicro --image-pull-policy=IfNotPresent
+```
+
 # Docker related
 ### Everyday repos
 #### MySQL Server CE
@@ -545,6 +561,7 @@ sudo docker run --net=host ray-xyz.com:9090/consul
 
 
 
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl
 
 
 
