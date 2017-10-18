@@ -164,7 +164,7 @@ kubectl get pods --all-namespaces
 
 ## Join to the master (Notice: you have to make sure you have started docker.service and kubele.serivce, or the slave node join successfully but doesn't show on the master node. And there have chances you may meet the `x509: certificate assigned by unknown authority` issue)
 ```
-kubeadm join --token 471c3a.d533dd3fd032e3f3 165.227.21.174:6443 --discovery-token-ca-cert-hash sha256:deff963386e33df9d045519b95f574d6136fe7b0b338b863dc288c70350dacc5
+kubeadm join --token b301f4.8f335802e86164fe 138.197.197.194:6443 --discovery-token-ca-cert-hash sha256:5de7774e494956996f33aa98a4a543e24fa59b678f150f23b70bc6998c308e8c
 ```
 
 ## Start docker.service and restart kubelet.service
@@ -267,6 +267,11 @@ kubectl logs -f nginx-ingress-controller-2156363272-f3qfm --v=10
 ## Attach to container in a pod.
 ```
 kubectl exec -it  YOUR_CONTAINER/POD_NAME bash
+```
+
+## Describe svc as json format
+```
+kubectl -n default -ojson get service sdmicro
 ```
 
 ## The simplist way to creat a kubernetes cluster.
@@ -453,10 +458,30 @@ https://www.ray-xyz.com:9090/v2/_catalog
 docker pull ray-xyz.com:9090/ubuntu1604
 ```
 
-## Stop and remove all containers
+## Stop and remove all containers(commands and bash script)
 ```
 sudo docker stop $(sudo docker ps -a -q)
 sudo docker rm $(sudo docker ps -a -q)
+```
+
+```
+sudo docker rm --force $(sudo docker ps -a | awk '{print $1}')
+```
+
+```
+#!/bin/bash
+containers=($(sudo docker ps -a | awk '{print $2}'))
+containerids=($(sudo docker ps -a | awk '{print $1}'))
+len_containers=${#containers[@]}
+for (( i=1; i<${len_containers}; i++ ));
+do
+    echo "container id => ${containerids[$i]}, container => ${containers[$i]}"
+    if (( "${containers[$i]}" == "usercenter" )); then
+        echo "Container usercenter already exists, it will be deleted."
+        sudo docker stop ${containerids[$i]}
+        sudo docker rm --force ${containerids[$i]}
+    fi
+done
 ```
 
 ## Delete all images
@@ -559,6 +584,10 @@ consul agent -dev -enable-script-checks
 sudo docker run --net=host ray-xyz.com:9090/consul
 ```
 
+## Cloning into 'mailman-bundler'... fatal: unable to access 'https://gitlab.com/mailman/mailman-bundler.git/': Problem with the SSL CA cert (path? access rights?)
+```
+apt-get install ca-certificates
+```
 
 
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl
