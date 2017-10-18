@@ -395,6 +395,38 @@ minikube service sdmicro
 kubectl run sdmicro --image=ray-xyz.com:9090/sdmicro --image-pull-policy=IfNotPresent
 ```
 
+## Demos
+### Deployment
+```
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sdmicro
+spec:
+  selector:
+    matchLabels:
+      app: sdmicro
+  replicas: 1
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: sdmicro
+    spec:
+      containers:
+      - name: sdmicro
+        image: ray-xyz.com:9090/sdmicro
+        ports:
+        - containerPort: 7878
+        volumeMounts: # For docker in docker, mount host volume to container
+        - name: host-docker-volume
+          mountPath: /var/run/
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: host-docker-volume
+        hostPath:
+          path: /var/run
+```
+
 # Docker related
 ### Everyday repos
 #### MySQL Server CE
@@ -419,6 +451,11 @@ https://docs.docker.com/registry/deploying/
 ## Run registry container
 ```
 docker run -d --restart=always --name registry -v ~/certs/ray-xyz.com:/certs -v /opt/docker-registry:/var/lib/registry  -e REGISTRY_HTTP_ADDR=0.0.0.0:9090 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key -p 9090:9090 registry:2
+```
+
+## Run Docker-in-Docker => dind, mount host volume on container.
+```
+sudo docker run -v /var/run/:/var/run ray-xyz.com:9090/sdmicro
 ```
 
 ## Login to registry server
