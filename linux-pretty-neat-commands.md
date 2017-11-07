@@ -10,6 +10,11 @@ sudo -i
 sudo su -
 ```
 
+## Create a folder and grant permissions to current user
+```
+chmod -R 777 go
+sudo chown -R ray go
+```
 ## Processes related
 ```
 ps -ax | grep nginx
@@ -123,6 +128,27 @@ sudo supervisord
 ```
 ip address
 ```
+
+## Create USB bootable disk (Especially for CentOS)
+### unetbootin
+https://tecadmin.net/how-to-create-bootable-linux-usb-using-ubuntu-or-linuxmint/#
+```
+$ sudo add-apt-repository ppa:gezakovacs/ppa
+$ sudo apt-get update
+$ sudo apt-get install unetbootin
+```
+### dd ddutility (Very good for USB & SD card reader)
+https://github.com/thefanclub/dd-utility
+https://www.thefanclub.co.za/how-to/dd-utility-write-and-backup-operating-system-img-and-iso-files-memory-card-or-disk
+
+## After installed centos-7 minimal, set up the network to support networking
+```
+systemctl enable NetworkManager
+systemctl start NetworkManager
+nmcli conn show
+nmcli conn up <name>
+```
+
 
 # Kubernetes related
 ## Reference
@@ -238,6 +264,7 @@ root@kube-master:~# kubectl scale deployments/com-shendu-service-usercenter-user
 ## Expose deployment to service
 ```
 kubectl expose deployment hiapi --type=NodePort
+kubectl expose deployment shendu-service-sdmicro-server --type=NodePort --port=9090 --target-port=9090 --labels='app=shendu-service-sdmicro-server'
 ```
 
 ## Select service by labels
@@ -610,7 +637,41 @@ $ git merge --no-commit maint
 git checkout -f another-branch
 ```
 
-## consul
+## Change the remote
+```
+git remote
+git remote set-url origin git@192.168.1.252:wangrui/sdmicro.git
+```
+
+## Forcefully overrite the remote repo with local one
+```
+git push origin dev -f
+```
+
+## Check size of Git proj
+```
+git count-objects -vH
+```
+
+# Mysql
+## Completely remove MySQL and reinstall mysql-server without backing up.
+```
+sudo apt-get purge mysql-server mysql-common mysql-client-5.7
+sudo rm -rf /var/lib/mysql /etc/mysql/ /var/log/mysql*
+sudo apt-get autoremove
+sudo apt-get autoclean
+```
+reboot
+  |
+  ^
+```
+sudo apt-get install mysql-server
+```
+Change some config, restart the service
+```
+service mysql restart
+``
+# consul
 ### Run on local
 ```
 consul agent -dev -enable-script-checks

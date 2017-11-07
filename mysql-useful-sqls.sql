@@ -35,5 +35,8 @@ WHERE table_schema='mydb' and table_name='mytable';
 select now();
 select DATE_ADD(now(), interval 20 minute);
 
+#### Change password
+
+
 
 
