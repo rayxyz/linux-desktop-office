@@ -130,6 +130,8 @@ ip address
 ```
 
 ## Create USB bootable disk (Especially for CentOS)
+### Download CentOS image
+https://www.centos.org/download/
 ### unetbootin
 https://tecadmin.net/how-to-create-bootable-linux-usb-using-ubuntu-or-linuxmint/#
 ```
@@ -463,6 +465,30 @@ sudo docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=123456 mysql/mysql-se
 ### Reference
 https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
 https://docs.docker.com/registry/deploying/
+
+## Restart docker
+```
+systemctl restart docker
+```
+
+## Set up a docker registry server on the local network
+### Reference
+http://www.itzgeek.com/how-tos/linux/centos-how-tos/how-to-setup-docker-private-registry-on-centos-7-ubuntu-16-04.html
+### Steps to set up local networked docker registry server
+```
+1. Install docker
+2. mkdir -p /certs
+2. Create self signed certificate
+	openssl req -newkey rsa:4096 -nodes -sha256 -keyout /certs/ca.key -x509 -days 365 -out /certs/ca.crt
+4. If the registry server doesn't have the file `/etc/resolv.conf`, then create it.
+5. Run the registry server
+	docker run -d -p 5000:5000 --restart=always --name registry -v /certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/ca.crt -e REGISTRY_HTTP_TLS_KEY=/certs/ca.key registry:2
+6. Copy the /certs/ca.crt from the registry server to docker build client(The machine you work on with docker daemon).
+7. Create entry in /etc/hosts
+8. Restart the docker engine service on both server and client.
+	systemctl restart docker
+9. Now, you can work as normal
+```
 
 ## Run docker registry with external accessible ability
 ### Reference
