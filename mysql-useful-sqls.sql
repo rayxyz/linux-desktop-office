@@ -37,6 +37,38 @@ select DATE_ADD(now(), interval 20 minute);
 
 #### Change password
 
+# show db activities
+show full processlist;
+
+# show db connections
+show status like 'Conn%';
+
+# kill db processes
+select concat('KILL ',id,';') from information_schema.processlist where user='root';
+select concat('KILL ',id,';') from information_schema.processlist where user='root' into outfile '/tmp/a.txt';
+source /tmp/a.txt;
+
+
+
+## biz useful clauses
+select concat('\'', replace('5004897902349720496/5430531878760392339/5720216184843999856', '/', ','));
+
+
+select 5720216184843999856, group_concat(t1.Name SEPARATOR '/') DeptTreeNames from organizationdepartment t1 where t1.Id in (5004897902349720496,5430531878760392339,5720216184843999856)
+union
+select 5720214843999856, group_concat(t1.Name SEPARATOR '/') DeptTreeNames from organizationdepartment t1 where t1.Id in (5004897902349720496,5430531878760392339,5720216184843999856)
+union
+select 57202184843999856, group_concat(t1.Name SEPARATOR '/') DeptTreeNames from organizationdepartment t1 where t1.Id in (5004897902349720496,5430531878760392339,5720216184843999856)
+union
+select 572021443543843999856, group_concat(t1.Name SEPARATOR '/') DeptTreeNames from organizationdepartment t1 where t1.Id in (5004897902349720496,5430531878760392339,5720216184843999856);
+
+select 4686192761008088649, group_concat(t1.Name SEPARATOR '/') DeptTreeNames 
+from (select t.* from organizationdepartment t where t.Id in (5317454385503830767,4686192761008088649) order by t.Level asc) t1;
+
+
+
+
+
 
 
 
