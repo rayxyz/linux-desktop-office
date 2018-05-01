@@ -40,6 +40,16 @@ ray@ray-pc:~$ ulimit -n
 sudo systemctl restart apache2
 ```
 
+## Restart networking
+```
+/etc/init.d/networking restart
+```
+
+## Restart network-manager
+```
+sudo service network-manager
+```
+
 ## show line number in vim
 ```
 :set number or :set nu
@@ -582,6 +592,11 @@ docker push ray-xyz.com:9090/ubuntu1604
 ### View repositories on registry server
 https://www.ray-xyz.com:9090/v2/_catalog
 
+### List repositories on registry server
+```
+curl --insecure https://localhost:5000/v2/_catalog
+```
+
 ### Pull a image
 ```
 docker pull ray-xyz.com:9090/ubuntu1604
@@ -735,7 +750,8 @@ sudo apt-get install mysql-server
 Change some config, restart the service
 ```
 service mysql restart
-``
+```
+
 # consul
 ### Run on local
 ```
@@ -753,7 +769,6 @@ apt-get install ca-certificates
 ```
 
 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl
 
 
 # Raspberry PI
