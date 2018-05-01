@@ -151,6 +151,45 @@ nmcli conn show
 nmcli conn up <name>
 ```
 
+## Install openssh-server
+### If shows error like, check on the topic `https://askubuntu.com/questions/546983/ssh-installation-errors`
+```
+sudo apt-get install openssh-server
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ openssh-server : Depends: openssh-client (= 1:7.2p2-4)
+                  Depends: openssh-sftp-server but it is not going to be installed
+                  Recommends: ssh-import-id but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.
+```
+### Then 
+```
+sudo apt-get install aptitude
+```
+### And then, install dependencies
+```
+sudo aptitude install openssh-client=1:7.2p2-4
+```
+### Finally, you can install openssh-server
+```
+sudo apt-get install openssh-server
+```
+
+# Shtudown server
+```
+ray@ray-mini:~$ sudo shutdown -r now
+or
+sudo poweroff
+```
+
 
 # Kubernetes related
 ## Reference
@@ -717,8 +756,32 @@ apt-get install ca-certificates
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.5/bin/linux/amd64/kubectl
 
 
+# Raspberry PI
+## Detect camera is available
+```
+vcgencmd get_camera
+```
+If camera is supported and is available, the output should be:
+```
+supported=1 detected=1
+```
 
-
+## Check if you have expanded the file system
+```
+df -h
+``
+output:
+```
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        15G  2.4G   12G  18% /
+devtmpfs        434M     0  434M   0% /dev
+tmpfs           438M     0  438M   0% /dev/shm
+tmpfs           438M   12M  427M   3% /run
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+tmpfs           438M     0  438M   0% /sys/fs/cgroup
+/dev/mmcblk0p1   42M   22M   20M  53% /boot
+tmpfs            88M     0   88M   0% /run/user/1000
+```
 
 
 
