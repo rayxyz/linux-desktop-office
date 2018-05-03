@@ -30,11 +30,6 @@ SELECT (data_length+index_length)/power(1024,3) tablesize_gb
 FROM information_schema.tables
 WHERE table_schema='mydb' and table_name='mytable';
 
-
-#### DATE_ADD
-select now();
-select DATE_ADD(now(), interval 20 minute);
-
 #### Change password
 
 # show db activities
@@ -68,7 +63,37 @@ from (select t.* from organizationdepartment t where t.Id in (531745438550383076
 
 
 
+# change column order
+ALTER TABLE `sd_mobi_smartcampus`.`t_announce` 
+CHANGE COLUMN `create_time` `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '公告创建时间' AFTER `sms_notif`;
 
+# partial odering
+select *
+from table t
+order by (eventdate = curdate()) desc,                               -- put today's events first
+         (case when eventdate = curdate() then eventtime end) asc,   -- order today in ascending order
+         (case when eventdate <> curdate() then eventtime end) desc; -- order the rest in descending order
+Eg.: 
+select
+    t.id node_id,
+    t.name,
+    t.template_id,
+    t.user_id,
+    t.user_name,
+	t.type,
+    t.create_time
+from
+    t_approve_process_template_nodes t
+where
+	t.template_id in (23, 24, 25, 26) order by template_id desc, node_id asc;
 
+# date operations
+## DATE_ADD
+select now();
+select DATE_ADD(now(), interval 20 minute);
+## format, add, sub
+select date_sub(date_format(date_add(now(), interval 1 day), '%Y-%m-%d'), interval 1 second) last_second_of_the_day;
+select date_format(now(), '%Y-%m-%d') first_second_of_today;
+select date_format(date_add(now(), interval 50 year), '%Y-%m-%d %H:%s:%i') first_second_of_tomorrow;
 
 

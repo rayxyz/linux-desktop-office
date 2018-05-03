@@ -694,6 +694,16 @@ git push origin dev -f
 git count-objects -vH
 ```
 
+## assume file unchanged(actually it has been changed)
+git update-index --assume-unchanged vendor/github.com/golang/protobuf/protoc-gen-go/protoc-gen-go
+## and track the changed file again
+git update-index --no-assume-unchanged vendor/github.com/golang/protobuf/protoc-gen-go/protoc-gen-go
+
+## Change user.name
+```
+ git config --global user.name "rayxyz"
+```
+
 # Mysql
 ## Completely remove MySQL and reinstall mysql-server without backing up.
 ```
@@ -727,6 +737,13 @@ sudo docker run --net=host ray-xyz.com:9090/consul
 ## Cloning into 'mailman-bundler'... fatal: unable to access 'https://gitlab.com/mailman/mailman-bundler.git/': Problem with the SSL CA cert (path? access rights?)
 ```
 apt-get install ca-certificates
+```
+
+# Install OpenCV
+```
+sudo apt-get install liblapack3 libgfortran3 gcc-5-base=5.3.1-14ubuntu2 libsane libgail18 libgtk2.0-0 libquadmath0 libgphoto2-6 libgnomekbd8 libxklavier16 gir1.2-gtk-3.0 adwaita-icon-theme libcogl20 gstreamer1.0-clutter-3.0 libclutter-gst-3.0-0 gstreamer1.0-plugins-good libcogl-pango20 libcogl-path20 libcogl20 libcogl20 libgl1-mesa-dri libtotem-plparser18 libwayland-egl1-mesa libcapnp-0.5.3 libmircommon7 libcaca0 libtag1v5 libegl1-mesa  libtxc-dxtn-s2tc0 libmircore1 libmirprotobuf3 libprotobuf-lite9v5 libmircore1 libegl1-mesa libqt5svg5 libproxy1v5 libdouble-conversion1v5 gcc-5-base libsoup-gnome2.4-1 librsvg2-2 glib-networking libarchive13 libquvi7 libegl1-mesa libenchant1c2a libgeoclue0 libharfbuzz-icu0 libxslt1.1 libapt-inst2.0 libwebkit2gtk-4.0-37-gtk2 python3-lxml   libimobiledevice6 libplist3 libllvm5.0
+
+sudo apt-get install python-opencv
 ```
 
 
