@@ -869,3 +869,47 @@ sudo make uninstall
 
 
 
+
+
+
+
+
+////////////////////////////////// 
+
+https://www.googleapis.com/customsearch/v1?key=AIzaSyBp3hgyJhHb0eqzRSYNl-_a0AHw_EToLBk&cx=006837971229697054245:dwfstyb2fvc&q=life&searchType=image
+
+<script>
+  (function() {
+    var cx = '006837971229697054245:dwfstyb2fvc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+
+请将文件MP_verify_bWjMdUxNheSqDcsq.txt上传至api.shendupeiban.com指向的web服务器（或虚拟主机）的目录
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
