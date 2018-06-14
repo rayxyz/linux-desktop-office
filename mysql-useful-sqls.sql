@@ -96,4 +96,10 @@ select date_sub(date_format(date_add(now(), interval 1 day), '%Y-%m-%d'), interv
 select date_format(now(), '%Y-%m-%d') first_second_of_today;
 select date_format(date_add(now(), interval 50 year), '%Y-%m-%d %H:%s:%i') first_second_of_tomorrow;
 
+# lock & unlock tables
+SHOW OPEN TABLES FROM sd_mobi_smartcampus WHERE In_use > 0 and `Table` = 't_leave';
+
+LOCK TABLES `t_leave_approve_conf` WRITE;
+UNLOCK TABLES;
+
 

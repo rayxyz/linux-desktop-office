@@ -743,6 +743,33 @@ git update-index --no-assume-unchanged vendor/github.com/golang/protobuf/protoc-
  git config --global user.name "rayxyz"
 ```
 
+## Stashing
+```
+Stashing before switch branches to avoid errors when switch to another branch, but the current changes are not committed.
+```
+### Stash
+```
+git stash
+```
+### Stash list
+```
+git stash list
+```
+```
+stash@{0}: WIP on ray: d805c16 add user appmodule rel feature
+stash@{1}: WIP on ray: d805c16 add user appmodule rel feature
+```
+### Apply a stash
+```
+git apply
+git apply stash@{1}
+git stash pop
+```
+### Drop a stash
+```
+git stash drop stash@{0}
+```
+
 # Mysql
 ## Completely remove MySQL and reinstall mysql-server without backing up.
 ```
@@ -866,33 +893,6 @@ print(cv.__version__)
 cd ~/softs/opencv-3.4.1/build
 sudo make uninstall
 ```
-
-
-
-
-
-
-
-
-////////////////////////////////// 
-
-https://www.googleapis.com/customsearch/v1?key=AIzaSyBp3hgyJhHb0eqzRSYNl-_a0AHw_EToLBk&cx=006837971229697054245:dwfstyb2fvc&q=life&searchType=image
-
-<script>
-  (function() {
-    var cx = '006837971229697054245:dwfstyb2fvc';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>
-
-
-请将文件MP_verify_bWjMdUxNheSqDcsq.txt上传至api.shendupeiban.com指向的web服务器（或虚拟主机）的目录
 
 
 
