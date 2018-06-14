@@ -200,6 +200,67 @@ or
 sudo poweroff
 ```
 
+# Open Files Limit
+## Max number of open files limit
+```
+cat /proc/sys/fs/file-max
+```
+## 
+```
+lsof | wc -l
+```
+## ulimit command
+### Limit of per process
+```
+ulimit -n
+```
+### Soft limit
+```
+ulimit -Sn
+```
+### Hard limit
+```
+ulimit -Hn
+```
+### See all limits
+> ulimit -Sa
+```
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 31242
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 31242
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+```
+> ulimit -Ha
+```
+core file size          (blocks, -c) unlimited
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 31242
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1048576
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) unlimited
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 31242
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+```
 
 # Kubernetes related
 ## Reference
