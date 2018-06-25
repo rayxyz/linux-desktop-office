@@ -102,4 +102,9 @@ SHOW OPEN TABLES FROM sd_mobi_smartcampus WHERE In_use > 0 and `Table` = 't_leav
 LOCK TABLES `t_leave_approve_conf` WRITE;
 UNLOCK TABLES;
 
+# Show tables status
+```
+select t.TABLE_NAME, t.TABLE_COMMENT, t.TABLE_ROWS from information_schema.tables t where t.TABLE_SCHEMA = 'db';
+```
+
 

@@ -262,6 +262,11 @@ virtual memory          (kbytes, -v) unlimited
 file locks                      (-x) unlimited
 ```
 
+# SCP
+```
+scp sd_schoolorg root@192.168.1.164:/shendu/bin
+```
+
 # Kubernetes related
 ## Reference
 https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
