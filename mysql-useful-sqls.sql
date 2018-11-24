@@ -43,8 +43,6 @@ select concat('KILL ',id,';') from information_schema.processlist where user='ro
 select concat('KILL ',id,';') from information_schema.processlist where user='root' into outfile '/tmp/a.txt';
 source /tmp/a.txt;
 
-
-
 ## biz useful clauses
 select concat('\'', replace('5004897902349720496/5430531878760392339/5720216184843999856', '/', ','));
 
@@ -60,7 +58,7 @@ select 572021443543843999856, group_concat(t1.Name SEPARATOR '/') DeptTreeNames 
 select 4686192761008088649, group_concat(t1.Name SEPARATOR '/') DeptTreeNames 
 from (select t.* from organizationdepartment t where t.Id in (5317454385503830767,4686192761008088649) order by t.Level asc) t1;
 
-
+select group_concat(Id) from classes where GradeId in (5620525785580714416) and IsDeleted = 0
 
 
 # change column order
@@ -99,12 +97,31 @@ select date_format(date_add(now(), interval 50 year), '%Y-%m-%d %H:%s:%i') first
 # lock & unlock tables
 SHOW OPEN TABLES FROM sd_mobi_smartcampus WHERE In_use > 0 and `Table` = 't_leave';
 
-LOCK TABLES `t_leave_approve_conf` WRITE;
+LOCK TABLES `table` WRITE;
 UNLOCK TABLES;
 
 # Show tables status
 ```
 select t.TABLE_NAME, t.TABLE_COMMENT, t.TABLE_ROWS from information_schema.tables t where t.TABLE_SCHEMA = 'db';
+```
+
+# Show processes and kill to unlock tables
+```
+show processlist
+kill pid
+```
+
+# version control
+```
+select t.* from (select t.id, t.version_number, t.desc, t.url,
+	t.create_user_id, t.create_user_name, t.create_time, CONCAT(
+        LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(version_number, '.', 1), '.', -1), 10, '0'),
+        LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(version_number, '.', 2), '.', -1), 10, '0'),
+        LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(version_number, '.', 3), '.', -1), 10, '0')
+       ) version_number_str from version t) t
+       where 1=1
+       and t.version_number_str > CONCAT(LPAD(?,10,'0'), LPAD(?,10,'0'), LPAD(?,10,'0'))
+       order by t.version_number_str desc limit 1;
 ```
 
 
