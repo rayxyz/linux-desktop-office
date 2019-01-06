@@ -814,6 +814,10 @@ tmpfs            88M     0   88M   0% /run/user/1000
 sudo apt-get install liblapack3 libgfortran3 gcc-5-base=5.3.1-14ubuntu2 libsane libgail18 libgtk2.0-0 libquadmath0 libgphoto2-6 libgnomekbd8 libxklavier16 gir1.2-gtk-3.0 adwaita-icon-theme libcogl20 gstreamer1.0-clutter-3.0 libclutter-gst-3.0-0 gstreamer1.0-plugins-good libcogl-pango20 libcogl-path20 libcogl20 libcogl20 libgl1-mesa-dri libtotem-plparser18 libwayland-egl1-mesa libcapnp-0.5.3 libmircommon7 libcaca0 libtag1v5 libegl1-mesa  libtxc-dxtn-s2tc0 libmircore1 libmirprotobuf3 libprotobuf-lite9v5 libmircore1 libegl1-mesa libqt5svg5 libproxy1v5 libdouble-conversion1v5 gcc-5-base libsoup-gnome2.4-1 librsvg2-2 glib-networking libarchive13 libquvi7 libegl1-mesa libenchant1c2a libgeoclue0 libharfbuzz-icu0 libxslt1.1 libapt-inst2.0 libwebkit2gtk-4.0-37-gtk2 python3-lxml   libimobiledevice6 libplist3 libllvm5.0
 
 sudo apt-get install python-opencv
+
+sudo apt-get install libopencv-objdetect-dev libopencv-highgui-dev libopencv-legacy-dev libopencv-contrib-dev  libopencv-videostab-dev libopencv-superres-dev libopencv-ocl-dev libcv-dev libhighgui-dev libcvaux-dev libopencv-highgui-dev libjasper-dev libjasper1
+
+sudo apt install libopencv-dev
 ```
 
 ## Completely remove OpenCV 2.4.9
@@ -824,13 +828,8 @@ sudo find / -name "*opencv*" -exec rm -i {} \;
 ## Install OpenCV by Compiling source code
 ### Install dependencies
 ```
-sudo apt-get install cmake gcc libv4l-dev libtiff-dev libpng12-dev
-apt-get install  libavutil-dev libavcodec-dev libavfilter-dev libavformat-dev libavdevice-dev pkg-config
-
+sudo apt-get install cmake gcc libv4l-dev libtiff-dev libpng12-dev libavutil-dev libavcodec-dev libavfilter-dev libavformat-dev libavdevice-dev libgtk2.0-dev gir1.2-gtk-3.0 pkg-config libgtk-3-0-dbg
 sudo apt install python3-dev libpython3.5-dev python3-numpy
-or
-sudo apt-get install python-pip python3-pip
-sudo pip install numpy
 ```
 ### Download source code
 ```
@@ -849,6 +848,10 @@ cd build
 sudo cmake ../
 sudo make
 sudo make intall
+```
+### If encounter `-- Looking for sys/videoio.h - not found` in cmake stage
+```
+sudo cmake -D WITH_V4L=OFF WITH_LIBV4L=OFF INSTALL_C_EXAMPLES=OFF ../
 ```
 ### If there are errors when making, remove the build directory and rerun the cmake command
 ```
