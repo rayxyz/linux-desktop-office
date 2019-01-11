@@ -1106,6 +1106,31 @@ COMMIT
 ssh -D 12345 root@104.248.221.14
 ```
 
+# install uninstalled libs after show up errors of installing other softwares
+```
+sudo apt-get -f install
+```
 
+# Install nginx
+```
+sudo apt-get update
+sudo apt-get install nginx
+```
 
+# ufw
+```
+sudo ufw enable
+
+sudo ufw disable
+
+sudo ufw status
+
+sudo ufw allow ssh
+
+sudo ufw allow 3306
+
+sudo ufw app list
+
+sudo ufw allow 'Nginx Full'
+```
 

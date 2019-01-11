@@ -124,4 +124,25 @@ select t.* from (select t.id, t.version_number, t.desc, t.url,
        order by t.version_number_str desc limit 1;
 ```
 
+# cast as date
+```
+select 
+    t.*
+from
+    t_attendance_clocking t
+where
+    t.shift_id in (36 , 37)
+        and cast(t.clock_time as date) between cast('2018-12-25' as date) and cast('2018-12-26' as date)
+order by t.clock_time desc;
+```
+
+# time_to_sec & if
+```
+select 
+    format(if((time_to_sec('2018-12-26 09:50:00') / 60 - time_to_sec('2018-12-26 07:50:00') / 60) <= 0,
+            0,
+            time_to_sec('2018-12-26 09:50:00') / 60 - time_to_sec('2018-12-26 07:50:00') / 60),
+        0) mins;
+```
+
 
