@@ -873,6 +873,10 @@ git stash pop
 ```
 git stash drop stash@{0}
 ```
+### Unmerge
+```
+git merge --abort
+```
 
 # Mysql
 ## Completely remove MySQL and reinstall mysql-server without backing up.
