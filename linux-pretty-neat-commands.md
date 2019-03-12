@@ -83,6 +83,14 @@ Restart sshd service
 $> sudo systemctl restart sshd
 ```
 
+## Speed up SSH connetion
+```
+vim /etc/ssh/sshd_config
+Change GSSAPIAuthentication yes => GSSAPIAuthentication no
+Change GSSAPICleanupCredentials yes => GSSAPICleanupCredentials no
+Change UseDNS yes => UseDNS no
+```
+
 ## Change device name
 ```
 sudo hostname dock-regis-svr
