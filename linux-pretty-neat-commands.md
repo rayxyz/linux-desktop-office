@@ -1,4 +1,13 @@
 # General
+## View date & time
+```
+root@ahezime:~# date
+Tue Mar 26 16:36:41 CST 2019
+```
+## Set time zone
+```
+root@ahezime:~# cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
 ## View macheine kernel
 ```
 uname -a
@@ -1148,4 +1157,9 @@ sudo ufw app list
 
 sudo ufw allow 'Nginx Full'
 ```
+
+
+
+
+
 
