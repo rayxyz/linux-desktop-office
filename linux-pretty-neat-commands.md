@@ -783,6 +783,11 @@ sudo docker inspect 6f3e8d085c66
 ```
 
 # Git
+## Push local new branch to remote and track
+```
+git push -u origin <branch>
+```
+
 ## List configs
 ```
 git config -l
@@ -893,6 +898,16 @@ git stash drop stash@{0}
 ### Unmerge
 ```
 git merge --abort
+```
+### Checkout a remote branch
+```
+git checkout -b newlocalbranchname origin/branch-name
+
+Or
+
+git checkout -t origin/branch-name
+
+The latter will create a branch that is also set to track the remote branch.me
 ```
 
 # Mysql
@@ -1157,9 +1172,5 @@ sudo ufw app list
 
 sudo ufw allow 'Nginx Full'
 ```
-
-
-
-
 
 
