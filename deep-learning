@@ -1,0 +1,24 @@
+Machine learning is, technically: searching for useful representa-
+tions of some input data, within a predefined space of possibilities, using guidance
+from a feedback signal.
+
+A machine-learning model transforms its input data into meaningful outputs, a pro-
+cess that is “learned” from exposure to known examples of inputs and outputs. There-
+fore, the central problem in machine learning and deep learning is to meaningfully
+transform data: in other words, to learn useful representations of the input data at
+hand—representations that get us closer to the expected output. Before we go any
+further: what’s a representation? At its core, it’s a different way to look at data—to rep-
+resent or encode data.
+
+Learning, in the context of machine learning, describes an automatic search
+process for better representations.
+
+Deep learning is, technically: a multistage way to learn data representations.
+
+The deep in deep learning isn’t a reference to any kind of
+deeper understanding achieved by the approach; rather, it stands for this idea of suc-
+cessive layers of representations. How many layers contribute to a model of the data is
+called the depth of the model. Other appropriate names for the field could have been
+layered representations learning and hierarchical representations learning.
+
+
