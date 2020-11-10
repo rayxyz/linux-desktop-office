@@ -1175,7 +1175,3 @@ sudo ufw allow 'Nginx Full'
 
 # Fix Linux GUI frozen
 https://www.fosslinux.com/39434/5-things-to-do-when-your-linux-system-gui-freezes.htm
-
-
-
-
